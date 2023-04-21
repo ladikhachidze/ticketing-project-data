@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -32,7 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findByUserName(String username) {
-        return null;
+        User user = userRepository.findByUserName(username);
+
+        return userMapper.convertToDto(user);
     }
 
     @Override
@@ -44,6 +47,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteByUserName(String username) {
+
+
+        userRepository.deleteByUserName(username);
+
+    }
+
+    @Override
+    public UserDTO update(UserDTO user) {
+
+        User user1 = userRepository.findByUserName(user.getUserName());
+
+        User convertToUser = userMapper.convertToEntity(user);
+
+        convertToUser.setId(user1.getId());
+
+        userRepository.save(convertToUser);
+
+        return findByUserName(user.getUserName());
+
 
     }
 }
