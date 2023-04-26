@@ -18,6 +18,7 @@ import java.time.LocalDate;
 public class Project extends BaseEntity{
 
 
+    @Column(unique = true)
     private String projectCode;
     private String projectName;
     @Column(columnDefinition = "DATE")
