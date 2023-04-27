@@ -13,7 +13,6 @@ import com.cydeo.repository.TaskRepository;
 import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +31,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserMapper userMapper;
 
+
     public TaskServiceImpl(TaskRepository taskRepository, TaskMapper taskMapper, ProjectMapper projectMapper, UserService userService, UserMapper userMapper) {
         this.taskRepository = taskRepository;
         this.taskMapper = taskMapper;
@@ -39,7 +39,6 @@ public class TaskServiceImpl implements TaskService {
         this.userService = userService;
         this.userMapper = userMapper;
     }
-
 
     @Override
     public List<TaskDTO> listAllTasks() {
@@ -143,4 +142,13 @@ public class TaskServiceImpl implements TaskService {
 
         return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
     }
+
+    @Override
+    public List<TaskDTO> listAllNonCompletedByAssignedEmployee(UserDTO assignedEmployee) {
+        List<Task> tasks = taskRepository.findAllByTaskStatusIsNotAndAssignedEmployee(Status.COMPLETE,userMapper.convertToEntity(assignedEmployee) );
+
+        return tasks.stream().map(taskMapper::convertToDto).collect(Collectors.toList());
+    }
+
+
 }
